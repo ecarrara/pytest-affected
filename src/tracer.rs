@@ -1,5 +1,4 @@
-use std::collections::HashSet;
-
+use hashbrown::HashSet;
 use pyo3::{prelude::*, types::PyString};
 
 #[pyclass]
@@ -26,7 +25,7 @@ impl Tracer {
             .collect();
 
         Ok(Self {
-            files: HashSet::new(),
+            files: HashSet::with_capacity(200),
             excluded_paths,
         })
     }
@@ -47,6 +46,10 @@ impl Tracer {
         }
 
         slf.into_py(py).getattr(py, "tracefunc")
+    }
+
+    fn clear_files(&mut self) {
+        self.files.clear()
     }
 
     #[getter]

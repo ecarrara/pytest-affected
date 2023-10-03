@@ -17,7 +17,7 @@ class Store:
     def list_recent_runs(self, node_id: str, limit: int) -> list[RunInstance]:
         raise NotImplementedError
 
-    def save_run(self, run_instance: RunInstance):
+    def save_runs(self, runs: list[RunInstance]):
         raise NotImplementedError
 
 
@@ -45,13 +45,17 @@ class SQLiteStore(Store):
         ]
         return runs
 
-    def save_run(self, run: RunInstance):
-        with self._connection:
-            self._connection.execute(
-                "insert into instances (node_id, files, reports) values (?, ?, ?) on conflict do nothing",
-                (
-                    run.nodeid,
-                    json.dumps(run.files),
-                    pickle.dumps(run.reports, protocol=pickle.HIGHEST_PROTOCOL),
-                ),
-            )
+    def save_runs(self, runs: list[RunInstance], chunk_size=500):
+        for i in range(0, len(runs), chunk_size):
+            with self._connection:
+                self._connection.executemany(
+                    "insert into instances (node_id, files, reports) values (?, ?, ?) on conflict do nothing",
+                    [
+                        (
+                            run.nodeid,
+                            json.dumps(run.files),
+                            pickle.dumps(run.reports, protocol=pickle.HIGHEST_PROTOCOL),
+                        )
+                        for run in runs[i : i + chunk_size]
+                    ],
+                )
