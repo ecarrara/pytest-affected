@@ -9,5 +9,5 @@ name = "pytest_affected"
 crate-type = ["cdylib"]
 
 [dependencies]
-fasthash = "0.4.0"
+murmurhash32 = "0.3.0"
 pyo3 = { version = "0.19.0", features = ["abi3-py38"] }
