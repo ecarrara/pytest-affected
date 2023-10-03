@@ -59,6 +59,10 @@ impl Tracer {
                     return false;
                 }
 
+                if path.is_empty() {
+                    return false;
+                }
+
                 for excluded_path in self.excluded_paths.iter() {
                     if path.starts_with(excluded_path) {
                         return false;
