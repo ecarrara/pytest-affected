@@ -184,7 +184,7 @@ dependencies = [
 
 [[package]]
 name = "pytest-affected"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "hashbrown",
  "murmurhash32",
