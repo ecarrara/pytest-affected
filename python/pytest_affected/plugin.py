@@ -97,6 +97,12 @@ def pytest_runtest_protocol(item, nextitem):
         setup_duration, call_duration, teardown_duration = -1, -1, -1
         for report in reports:
             item.ihook.pytest_runtest_logreport(report=report)
+            if report.when == "setup":
+                setup_duration = report.duration
+            if report.when == "call":
+                call_duration = report.duration
+            if report.when == "setup":
+                setup_duration = report.duration
         item.ihook.pytest_runtest_logfinish(nodeid=item.nodeid, location=item.location)
 
         files = []

@@ -62,10 +62,10 @@ class SQLiteStore(Store):
                         (
                             run.nodeid,
                             json.dumps(run.files),
-                            pickle.dumps(run.reports, protocol=pickle.HIGHEST_PROTOCOL),
                             run.setup_duration,
                             run.call_duration,
                             run.teardown_duration,
+                            pickle.dumps(run.reports, protocol=pickle.HIGHEST_PROTOCOL),
                         )
                         for run in runs[i : i + chunk_size]
                     ],
