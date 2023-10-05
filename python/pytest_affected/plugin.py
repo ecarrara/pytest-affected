@@ -48,9 +48,9 @@ def pytest_runtest_protocol(item, nextitem):
         item.ihook.pytest_runtest_logstart(nodeid=item.nodeid, location=item.location)
 
         affected.tracer.clear_files()
-        sys.settrace(affected.tracer.tracefunc)
+        affected.tracer.start()
         reports = runtestprotocol(item=item, log=False, nextitem=nextitem)
-        sys.settrace(None)
+        affected.tracer.stop()
 
         for report in reports:
             item.ihook.pytest_runtest_logreport(report=report)
