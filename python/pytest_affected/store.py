@@ -72,4 +72,5 @@ class SQLiteStore(Store):
                 )
 
     def delete_old_runs(self, secs):
-        self._connection.execute(f"delete from instances where run_at < datetime(current_timestamp, '-{secs} seconds')")
+        with self._connection:
+            self._connection.execute(f"delete from instances where run_at < datetime(current_timestamp, '-{secs} seconds')")
