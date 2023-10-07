@@ -1,13 +1,8 @@
-import time
+import pytest
 
 from project1 import hello_world
 
 
-def test_pass():
-    time.sleep(3)
+@pytest.mark.parametrize("value", range(1000))
+def test_pass(value):
     assert hello_world(2, 2) == 4
-
-
-def test_fail():
-    time.sleep(3)
-    assert hello_world(2, 2) == 5

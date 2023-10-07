@@ -8,7 +8,6 @@ class Affected:
     def __init__(self):
         self.store: SQLiteStore = SQLiteStore()
         self.hasher = Murmur3Hasher()
-        self.tracer = Tracer()
         self.runs: list[RunInstance] = []
 
     def clear_cache(self, cache_ttl: int):
@@ -89,10 +88,10 @@ def pytest_runtest_protocol(item, nextitem):
     else:
         item.ihook.pytest_runtest_logstart(nodeid=item.nodeid, location=item.location)
 
-        affected.tracer.clear_files()
-        affected.tracer.start()
+        Tracer.clear_files()
+        Tracer.start()
         reports = runtestprotocol(item=item, log=False, nextitem=nextitem)
-        affected.tracer.stop()
+        Tracer.stop()
 
         setup_duration, call_duration, teardown_duration = -1, -1, -1
         for report in reports:
@@ -106,7 +105,7 @@ def pytest_runtest_protocol(item, nextitem):
         item.ihook.pytest_runtest_logfinish(nodeid=item.nodeid, location=item.location)
 
         files = []
-        for filepath in affected.tracer.user_files:
+        for filepath in Tracer.user_files():
             hash = affected.hasher.hash_file(filepath)
             files.append((filepath, hash))
 
